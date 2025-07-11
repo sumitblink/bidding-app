@@ -287,3 +287,15 @@ process.on('SIGINT', () => {
   console.log('\n👋 Server shutting down...');
   process.exit(0);
 });
+
+// For Vercel deployment, export the app
+module.exports = app;
+
+// For local development, start server
+if (require.main === module) {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log('🚀 RTB Bidder Server Started!');
+    console.log(`🌐 Dashboard: http://localhost:${PORT}`);
+  });
+}
