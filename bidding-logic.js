@@ -5,7 +5,7 @@ const bidders = {
     minBid: 8.00,
     maxBid: 18.00,
     delay: 500,
-    phone: "+919870335500"
+    phone: "+917208280595"
   },
   homeServices: {
     name: "Home Services Plus", 
@@ -13,7 +13,7 @@ const bidders = {
     minBid: 12.00,
     maxBid: 28.00,
     delay: 800,
-    phone: "+919870335500"
+    phone: "+917208280595"
   },
   premium: {
     name: "Premium Leads Exchange",
@@ -21,7 +21,7 @@ const bidders = {
     minBid: 15.00,
     maxBid: 35.00,
     delay: 300,
-    phone: "+919870335500"
+    phone: "+917208280595"
   }
 };
 
