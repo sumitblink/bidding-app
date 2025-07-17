@@ -41,32 +41,48 @@ function calculateBid(bidder, request) {
   const requestMin = parseFloat(minBidAmount || minBid) || bidder.minBid;
   const requestMax = parseFloat(maxBidAmount || maxBid) || bidder.maxBid;
   
-  console.log(`[${bidder.name}] Bid range: $${requestMin} - $${requestMax}`);
+  console.log(`[${bidder.name}] Request range: $${requestMin} - $${requestMax}`);
+  console.log(`[${bidder.name}] Bidder range: $${bidder.minBid} - $${bidder.maxBid}`);
   
-  let baseBid = Math.random() * (bidder.maxBid - bidder.minBid) + bidder.minBid;
-  let multiplier = 1.0;
+  // Determine the effective bidding range (intersection of request and bidder ranges)
+  const effectiveMin = Math.max(requestMin, bidder.minBid);
+  const effectiveMax = Math.min(requestMax, bidder.maxBid);
   
-  // State preferences
-  const goodStates = ['CA', 'NY', 'TX', 'FL'];
-  if (goodStates.includes(callerState)) {
-    multiplier = 1.2;
-    console.log(`[${bidder.name}] State bonus applied: ${callerState}`);
+  // If there's no valid range, return minimum possible bid
+  if (effectiveMin > effectiveMax) {
+    console.log(`[${bidder.name}] No valid bid range, using minimum: $${effectiveMin.toFixed(2)}`);
+    return effectiveMin;
   }
   
-  // Zip code quality
+  // Generate a random bid within the effective range
+  let baseBid = Math.random() * (effectiveMax - effectiveMin) + effectiveMin;
+  let multiplier = 1.0;
+  
+  // State preferences (increase bid for good states)
+  const goodStates = ['CA', 'NY', 'TX', 'FL'];
+  if (goodStates.includes(callerState)) {
+    multiplier = 1.1 + (Math.random() * 0.2); // 1.1 to 1.3
+    console.log(`[${bidder.name}] State bonus applied: ${callerState} (${multiplier.toFixed(2)}x)`);
+  }
+  
+  // Zip code quality bonus
   if (callerZip) {
     const zip = parseInt(callerZip);
     if (zip >= 90000 || (zip >= 10000 && zip <= 19999)) {
-      multiplier *= 1.15;
+      multiplier *= 1.05 + (Math.random() * 0.1); // Additional 1.05 to 1.15
       console.log(`[${bidder.name}] ZIP bonus applied: ${callerZip}`);
     }
   }
   
-  const finalBid = Math.min(baseBid * multiplier, Math.min(bidder.maxBid, requestMax));
-  const result = Math.max(finalBid, requestMin);
+  // Calculate the final bid
+  let finalBid = baseBid * multiplier;
   
-  console.log(`[${bidder.name}] Final bid: $${result.toFixed(2)}`);
-  return result;
+  // Ensure it's within bounds
+  finalBid = Math.min(finalBid, Math.min(bidder.maxBid, requestMax));
+  finalBid = Math.max(finalBid, Math.max(bidder.minBid, requestMin));
+  
+  console.log(`[${bidder.name}] Base: $${baseBid.toFixed(2)}, Multiplier: ${multiplier.toFixed(2)}, Final: $${finalBid.toFixed(2)}`);
+  return finalBid;
 }
 
 async function processBid(bidder, request) {
