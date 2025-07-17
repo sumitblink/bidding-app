@@ -2,24 +2,24 @@ const bidders = {
   insurance: {
     name: "Insurance Pro Network",
     bidRate: 0.75,
-    minBid: 8.00,
-    maxBid: 18.00,
+    minBid: 2.00,
+    maxBid: 8.00,
     delay: 500,
     phone: "+917208280595"
   },
   homeServices: {
     name: "Home Services Plus", 
     bidRate: 0.60,
-    minBid: 12.00,
-    maxBid: 28.00,
+    minBid: 2.00,
+    maxBid: 8.00,
     delay: 800,
     phone: "+917208280595"
   },
   premium: {
     name: "Premium Leads Exchange",
     bidRate: 0.85,
-    minBid: 15.00,
-    maxBid: 35.00,
+    minBid: 2.00,
+    maxBid: 8.00,
     delay: 300,
     phone: "+917208280595"
   }
